@@ -26,25 +26,25 @@
     <button id="copy">Copy Code</button>
 </div>
 
-<script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
 <script>
-const socket = io('https://black-hat-bot-pairing.onrender.com'); // Change to your server
-
 document.getElementById('generate').addEventListener('click', async () => {
     const number = document.getElementById('number').value.trim();
     if(!number) return alert('Enter your WhatsApp number with country code');
 
+    document.getElementById('codeOutput').innerText = "Generating code... Please wait";
+
     try {
-        const res = await fetch(`https://your-server-url.onrender.com/code?number=${encodeURIComponent(number)}`);
+        const res = await fetch(`https://black-hat-bot-pairing.onrender.com/code?number=${encodeURIComponent(number)}`);
         const data = await res.json();
+
         if(data.code){
             document.getElementById('codeOutput').innerText = data.code;
         } else {
-            document.getElementById('codeOutput').innerText = 'Failed to generate code';
+            document.getElementById('codeOutput').innerText = data.error || 'Failed to generate code';
         }
     } catch(err){
         console.error(err);
-        document.getElementById('codeOutput').innerText = 'Error connecting to server';
+        document.getElementById('codeOutput').innerText = 'Server sleeping... please wait 40 seconds and try again';
     }
 });
 
@@ -53,12 +53,8 @@ document.getElementById('copy').addEventListener('click', () => {
     navigator.clipboard.writeText(code);
     alert('Code copied!');
 });
-
-// Optional: Live QR updates
-socket.on('qr', data => {
-    document.getElementById('codeOutput').innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${data.qr}" width="150" />`;
-});
 </script>
 </body>
 </html>
+
 
