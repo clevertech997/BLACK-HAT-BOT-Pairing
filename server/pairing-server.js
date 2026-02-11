@@ -1,3 +1,13 @@
+const express = require("express")
+const { default: makeWASocket, useMultiFileAuthState } = require("@whiskeysockets/baileys")
+
+const app = express()
+const PORT = process.env.PORT || 10000
+
+app.get("/", (req, res) => {
+    res.send("🟢 BLACK HAT BOT Pairing Server Running!")
+})
+
 app.get("/code", async (req, res) => {
     const number = req.query.number
 
@@ -23,4 +33,8 @@ app.get("/code", async (req, res) => {
         console.log(err)
         res.json({ error: "Failed to generate code" })
     }
+})
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
 })
